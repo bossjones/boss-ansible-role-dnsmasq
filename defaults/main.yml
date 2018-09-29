@@ -84,7 +84,7 @@ boss__dnsmasq__conf_strict_order: False
 boss__dnsmasq__conf_all_servers: False
 
 # If you want dnsmasq to read "/etc/resolv.conf" or any other file.
-# Empty or not defined to disable reading resolfv.conf
+# Empty or not defined to disable reading resolv.conf
 boss__dnsmasq__conf_resolv: /etc/resolv.conf
 
 # Don't poll /etc/resolv.conf for changes.

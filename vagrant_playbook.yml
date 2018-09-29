@@ -1,6 +1,3 @@
-# ansible-playbook -i inventory-homelab/ bootstrap_office.yml --check
-# ansible-playbook -i inventory-homelab/ bootstrap_office.yml
-# ansible-playbook -i inventory-homelab/ bootstrap_office.yml --tags "raspbian1"
 ---
 
 # no_log: true
@@ -13,12 +10,51 @@
   tags:
     - dnsmasq
   roles:
-    # - role: boss-ansible-role-core
-    # - role: boss-ansible-role-fact
-    # - role: boss-ansible-role-environment
+    - role: boss-ansible-role-bootstrap
+    - role: boss-ansible-role-core
+    - role: boss-ansible-role-fact
+    - role: boss-ansible-role-environment
     - role: ../
-      # boss__dnsmasq__conf_hosts:
-      #   - ["192.168.1.10", "foo.mydomain.org", "foo" ]
+      boss__dnsmasq__conf_log_async: 25
+      # For debugging purposes, log each DNS query as it passes through
+      boss__dnsmasq__conf_log_dns: True
+      boss__dnsmasq__conf_dns_loop_detect: True
+      #  All reverse lookups for private IP ranges (ie 192.168.x.x, etc) which
+      # are not found in /etc/hosts or the DHCP leases file are answered with
+      # "no such domain" rather than being forwarded upstream.
+      # Never forward addresses in the non-routed address spaces.
+      boss__dnsmasq__conf_bogus_priv: True
+      # If you don't want dnsmasq to read /etc/hosts
+      boss__dnsmasq__conf_no_hosts: True
+      boss__dnsmasq__packages_install_recommends: True
+      # Upgrade the database if older than these seconds
+      # Time is only valid in Debian, set to 0/False to disable
+      boss__dnsmasq__packages_update_cache: 1800
+
+      boss__dnsmasq__daemon: dnsmasq
+      boss__dnsmasq__user: dnsmasq
+      boss__dnsmasq__group: nogroup
+
+      boss__dnsmasq__pidfile: /var/run/dnsmasq.pid
+      boss__dnsmasq__config_file: /etc/dnsmasq.conf
+      boss__dnsmasq__config_dir: /etc/dnsmasq.d
+      boss__dnsmasq__var_dir: /var/lib/dnsmasq
+      boss__dnsmasq__config_addhosts: /etc/dnsmasq.hosts
+      boss__dnsmasq__config_dhcphosts: /var/lib/dnsmasq/dhcp.leases
+      boss__dnsmasq__config_dhcpscript: /var/lib/dnsmasq/script
+      # Never forward plain names (without a dot or domain part)
+      boss__dnsmasq__conf_domain_needed: True
+      boss__dnsmasq__conf_cache_size: 10000
+      ###############################################
+      #       search localdomain
+      # nameserver 192.168.1.1
+      ### resolv.conf
+      boss__dnsmasq__host_domain: darklabs.home
+      #boss__dnsmasq__host_search: local
+      # Set it to the ips of the private DNS servers, then default to LAN nameserver
+      boss__dnsmasq__host_resolvers: [ "127.0.0.1" , "192.168.33.100", "192.168.33.101", "192.168.1.1" ]
+      boss__dnsmasq__conf_strict_order: True
+      ##############################################
       boss__dnsmasq__dhcp: False
       boss__dnsmasq__tftp: False
       boss__dnsmasq__conf_dhcp:
@@ -56,7 +92,12 @@
       #boss__dnsmasq__conf_servers:
       #  - [ "/google.com/", "8.8.8.8" ]
       #  - "8.8.4.4"
-      boss__dnsmasq__conf_servers: [ "/darklabs.home/", "8.8.8.8", "8.8.4.4" ]
+
+      # NOTE: local=
+      # # Specify IP address of upstream servers directly. Setting this flag does not
+      # suppress reading of /etc/resolv.conf.
+      # Don't let anything outside of our dns server return resolved ip addresses for these values below
+      boss__dnsmasq__conf_servers: [ "/darklabs.home/", "/hyenalabs.home/" ]
 
       # Log lots of extra information about DHCP transactions.
       boss__dnsmasq__conf_log_dhcp: False
