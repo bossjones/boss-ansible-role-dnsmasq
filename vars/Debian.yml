@@ -4,3 +4,7 @@ boss__dnsmasq__pidfile: /var/run/dnsmasq/dnsmasq.pid
 boss__dnsmasq__packages:
   dnsmasq:
     state: latest
+
+boss__dnsmasq__packages_extra_tools:
+  dnsutils:
+    state: latest

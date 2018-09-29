@@ -1,0 +1,13 @@
+---
+
+- name: Debian - Install extra dnsutils packages
+  apt:
+    name: "{{ item.key if ('version' not in item.value) else ('%s=%s' % (item.key, item.value['version'])) }}"
+    state: "{{ item.value.state | default('present') }}"
+    install_recommends: "{{ boss__dnsmasq__packages_install_recommends }}"
+    update_cache: "{{ boss__dnsmasq__packages_update_cache | ternary('yes', 'no') }}"
+    cache_valid_time: "{{ boss__dnsmasq__packages_update_cache }}"
+  with_dict: "{{ boss__dnsmasq__packages_extra_tools }}"
+  when: ansible_os_family == 'Debian'
+  register: boss__dnsmasq__installed_debian
+  tags: ["debian", "packages"]

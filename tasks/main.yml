@@ -26,3 +26,6 @@
 
 - include: configure.yml
   tags: ["dnsmasq", "configure"]
+
+- include: tools.yml
+  tags: ["dnsmasq", "tools"]
