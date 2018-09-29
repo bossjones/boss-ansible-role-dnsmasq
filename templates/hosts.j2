@@ -2,6 +2,6 @@
 # {{ ansible_managed }}
 # Configuration file for dnsmasq
 
-{% for host in dnsmasq_conf_hosts -%}
+{% for host in boss__dnsmasq__conf_hosts -%}
 {{ host | join(' ') }}
 {% endfor %}

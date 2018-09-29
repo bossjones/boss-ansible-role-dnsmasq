@@ -1,7 +1,7 @@
 ---
 - name: Ensure that dnsmasq is running
   service:
-    name: "{{ dnsmasq_daemon }}"
+    name: "{{ boss__dnsmasq__daemon }}"
     state: started
   register: result
   ignore_errors: True
@@ -15,4 +15,3 @@
     mode: 0644
   notify: reload dnsmasq
   when: result.state is defined and result.state == 'started'
- 

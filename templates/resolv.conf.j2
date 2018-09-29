@@ -1,12 +1,12 @@
 #jinja2: trim_blocks: "true", lstrip_blocks: "true"
 # {{ ansible_managed }}
 
-{% if dnsmasq_host_domain is defined and dnsmasq_host_domain -%}
-domain {{ dnsmasq_host_domain }}
+{% if boss__dnsmasq__host_domain is defined and boss__dnsmasq__host_domain -%}
+domain {{ boss__dnsmasq__host_domain }}
 {% endif -%}
-{% if dnsmasq_host_search is defined and dnsmasq_host_search -%}
-search {{ dnsmasq_host_search }}
+{% if boss__dnsmasq__host_search is defined and boss__dnsmasq__host_search -%}
+search {{ boss__dnsmasq__host_search }}
 {% endif -%}
-{% for ns in dnsmasq_host_resolvers -%}
+{% for ns in boss__dnsmasq__host_resolvers -%}
 nameserver {{ ns }}
 {% endfor %}

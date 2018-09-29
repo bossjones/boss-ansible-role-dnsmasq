@@ -1,0 +1,24 @@
+# https://gist.github.com/gnarf/b103e77f37236ca72d8e
+:vms:
+  dnsmasq1:
+    :hostname: "dnsmasq1"
+    :ip: "192.168.33.100"
+    :ram: 1024
+    :cpu: 2
+    :box: "debian/stretch64"
+
+  dnsmasq2:
+    :hostname: "dnsmasq2"
+    :ip: "192.168.33.101"
+    :ram: 1024
+    :cpu: 2
+    :box: "debian/stretch64"
+
+:groups:
+  dnsmasq1:
+    - dnsmasq1
+  dnsmasq2:
+    - dnsmasq2
+  dnsmasq_servers:
+    - dnsmasq1
+    - dnsmasq2

@@ -1,12 +1,12 @@
 ---
 - name: restart dnsmasq
-  service: name="{{ dnsmasq_daemon }}" state=restarted
+  service: name="{{ boss__dnsmasq__daemon }}" state=restarted
 
 - name: reload dnsmasq
-  shell: "kill -s HUP $(cat {{ dnsmasq_pidfile }})"
+  shell: "kill -s HUP $(cat {{ boss__dnsmasq__pidfile }})"
 
 - name: start dnsmasq
-  service: name="{{ dnsmasq_daemon }}" state=started
+  service: name="{{ boss__dnsmasq__daemon }}" state=started
 
 - name: stop dnsmasq
-  service: name="{{ dnsmasq_daemon }}" state=stopped
+  service: name="{{ boss__dnsmasq__daemon }}" state=stopped

@@ -1,6 +1,6 @@
 ---
-dnsmasq_pidfile: /var/run/dnsmasq/dnsmasq.pid
+boss__dnsmasq__pidfile: /var/run/dnsmasq/dnsmasq.pid
 
-dnsmasq_packages:
+boss__dnsmasq__packages:
   dnsmasq:
     state: latest

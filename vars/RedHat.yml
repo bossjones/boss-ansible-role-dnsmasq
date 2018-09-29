@@ -1,9 +1,9 @@
 ---
-dnsmasq_pidfile: /var/run/dnsmasq.pid
+boss__dnsmasq__pidfile: /var/run/dnsmasq.pid
 
-dnsmasq_user: nobody
-dnsmasq_group: nobody
+boss__dnsmasq__user: nobody
+boss__dnsmasq__group: nobody
 
-dnsmasq_packages:
+boss__dnsmasq__packages:
   dnsmasq:
     state: latest

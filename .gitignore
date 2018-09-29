@@ -32,3 +32,4 @@ roles/*
 .vagrant/
 *.log
 *.retry
+.vagrant

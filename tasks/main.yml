@@ -1,4 +1,10 @@
 ---
+- name: lookup architecture
+  set_fact: architecture="{{ ((ansible_architecture|truncate(3,true,'')) == 'arm') | ternary('ARM','X86') }}"
+
+- name: show architecture
+  debug: msg="architecture is set to {{ architecture }}"
+
 - name: Control if the role is supported on this system
   fail: msg="Dnsmasq role is not supported on this system"
   when: >
