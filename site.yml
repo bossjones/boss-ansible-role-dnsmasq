@@ -1,0 +1,86 @@
+---
+- hosts: all
+  become: true
+
+  vars:
+    pip_install_packages:
+      - name: docker
+
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+    - role: .
+      # dnsmasq_conf_hosts:
+      #   - ["192.168.1.10", "foo.mydomain.org", "foo" ]
+      dnsmasq_conf_dhcp:
+        # enp0s8 for Centos 7, eth1 for Ubuntu
+        - device: "{{ ansible_default_ipv4.interface }}"
+          range: ["10.0.0.0", "10.0.7.255", "infinite"]
+          ignore_names: True
+          generate_names: True
+          option:
+            - "option:router,{{ ansible_default_ipv4.gateway }}"
+            - "option:dns-server,{{ ansible_default_ipv4.address }}"
+          boot:
+            - "pxelinux.0"
+          tftp: "/tmp"
+      # Additional hosts file, /etc/hosts format (it is a list!)
+      dnsmasq_conf_hosts:
+      # - ["127.0.0.1", "localhost"]
+      # - ["::1", "ip6-localhost", "ip6-loopback"]
+      # - ["fe00::0", "ip6-localnet"]
+      # - ["ff00::0", "ip6-mcastprefix"]
+      # - ["ff02::1", "ip6-allnodes"]
+      # - ["ff02::2", "ip6-allrouters"]
+      - ["10.0.0.10", "dnsmasq.darklabs.home", "dnsmasq" ]
+
+      # Specify IP address of upstream servers directly. Setting this flag does not
+      # suppress reading of /etc/resolv.conf: ['localnet', '192.168.0.1']
+      # Example of routing PTR queries to nameservers: this will send all:
+      # address->name queries for 192.168.3/24 to nameserver 10.1.2.3
+      # ['3.168.192.in-addr.arpa', '10.1.2.3']
+      #dnsmasq_conf_servers:
+      #  - [ "/google.com/", "8.8.8.8" ]
+      #  - "8.8.4.4"
+      dnsmasq_conf_servers: [ "/darklabs.home/", "8.8.8.8", "8.8.4.4" ]
+
+      # Log lots of extra information about DHCP transactions.
+      dnsmasq_conf_log_dhcp: True
+
+      # Should be set when dnsmasq is definitely the only DHCP server on a network.
+      dnsmasq_conf_dhcp_authoritative: False
+
+      # Set the domain for dnsmasq. this is optional, but if it is set, it
+      # does the following things.
+      # 1) Allows DHCP hosts to have fully qualified domain names, as long
+      #     as the domain part matches this setting.
+      # 2) Sets the "domain" DHCP option thereby potentially setting the
+      #    domain of all systems configured by DHCP
+      # 3) Provides the domain part for "expand-hosts"
+      # If the domain is given as "#" then the domain is read from the first
+      # "search" directive in /etc/resolv.conf
+      dnsmasq_conf_domain: "darklabs.home"
+
+      # Only if dnsmasq_conf_domain is set, the unqualified name is no longer put
+      # in the DNS, only the qualified name.
+      dnsmasq_conf_dhcp_fqdn: True
+
+      ### resolv.conf
+      # appended to DHCP hosts and, if above option specified, to hosts from static IPs
+      # domain=lan.mydomain.com
+      dnsmasq_host_domain: "darklabs.home"
+      dnsmasq_host_search: "darklabs.home"
+      # -------------------------------------------------------------------
+      # 127.0.0.1	localhost
+      # # The following lines are desirable for IPv6 capable hosts
+      # ::1	ip6-localhost	ip6-loopback
+      # fe00::0	ip6-localnet
+      # ff00::0	ip6-mcastprefix
+      # ff02::1	ip6-allnodes
+      # ff02::2	ip6-allrouters
+      # ff02::3	ip6-allhosts
+      # 127.0.1.1	ubuntu-xenial	ubuntu-xenial
+      # dnsmasq_conf_hosts: []
+
+#   - name: Display all variables/facts known for a host
+#     debug: var=hostvars[inventory_hostname]
