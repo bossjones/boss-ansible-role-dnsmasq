@@ -214,7 +214,7 @@ Vagrant.configure(2) do |config|
         ansible.limit = 'all'
         ansible.playbook = 'vagrant_playbook.yml'
         ansible.groups = config_yml[:groups]
-        ansible.verbose = 'vvvv'
+        ansible.verbose = 'vvv'
         ansible.extra_vars = {
           deploy_env: 'vagrant'
         }
