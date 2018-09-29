@@ -19,6 +19,8 @@
     - role: .
       # boss__dnsmasq__conf_hosts:
       #   - ["192.168.1.10", "foo.mydomain.org", "foo" ]
+      boss__dnsmasq__dhcp: False
+      boss__dnsmasq__tftp: False
       boss__dnsmasq__conf_dhcp:
         # enp0s8 for Centos 7, eth1 for Ubuntu
         - device: "{{ ansible_default_ipv4.interface }}"
@@ -39,7 +41,8 @@
       # - ["ff00::0", "ip6-mcastprefix"]
       # - ["ff02::1", "ip6-allnodes"]
       # - ["ff02::2", "ip6-allrouters"]
-      - ["10.0.0.10", "dnsmasq.darklabs.home", "dnsmasq" ]
+      - ["192.168.33.100", "dnsmasq1.darklabs.home", "dnsmasq1" ]
+      - ["192.168.33.101", "dnsmasq2.darklabs.home", "dnsmasq2" ]
 
       # Specify IP address of upstream servers directly. Setting this flag does not
       # suppress reading of /etc/resolv.conf: ['localnet', '192.168.0.1']
@@ -52,7 +55,7 @@
       boss__dnsmasq__conf_servers: [ "/darklabs.home/", "8.8.8.8", "8.8.4.4" ]
 
       # Log lots of extra information about DHCP transactions.
-      boss__dnsmasq__conf_log_dhcp: True
+      boss__dnsmasq__conf_log_dhcp: False
 
       # Should be set when dnsmasq is definitely the only DHCP server on a network.
       boss__dnsmasq__conf_dhcp_authoritative: False
