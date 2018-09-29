@@ -6,7 +6,7 @@
 require 'yaml'
 config_yml = YAML.load_file(File.open(__dir__ + '/vagrant-config.yml'))
 
-NON_ROOT_USER = "vagrant"
+NON_ROOT_USER = 'vagrant'.freeze
 SWAPSIZE = 1000
 
 # # Clone ansible-bootstrap repository
@@ -24,7 +24,6 @@ SWAPSIZE = 1000
 # ")
 
 Vagrant.configure(2) do |config|
-
   # set auto update to false if you do NOT want to check the correct additions version when booting this machine
   # config.vbguest.auto_update = true
 
@@ -87,14 +86,34 @@ Vagrant.configure(2) do |config|
         vm_config.hostmanager.aliases = aliases
       end
 
-      # Enable provisioning with a shell script. Additional provisioners such as
-      # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-      # documentation for more information about their specific syntax and use.
-      vm_config.vm.provision 'shell', inline: <<-SHELL
-        sudo apt-get update && sudo apt-get install python htop ncdu -y && sudo apt-get install -f
-      SHELL
+      #   # Enable provisioning with a shell script. Additional provisioners such as
+      #   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+      #   # documentation for more information about their specific syntax and use.
+      #   vm_config.vm.provision 'shell', inline: <<-SHELL
+      #     sudo apt-get update && sudo apt-get install python htop ncdu -y && sudo apt-get install -f
+      #   SHELL
 
-      #   config.vm.provision 'shell', inline: <<-SHELL
+      #   #   config.vm.provision 'shell', inline: <<-SHELL
+      #   #       apt-get update
+      #   #       apt-get install -y \
+      #   #         apt-transport-https \
+      #   #         ca-certificates \
+      #   #         curl \
+      #   #         python3-pip \
+      #   #         software-properties-common
+      #   #       pip3 install virtualenv
+      #   #       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+      #   #       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      #   #       apt-get update
+      #   #       apt-get install -y docker-ce
+      #   #       usermod --groups docker --append #{NON_ROOT_USER}
+      #   #       echo vm.max_map_count=262144 > /etc/sysctl.d/vm_max_map_count.conf
+      #   #       sysctl --system
+      #   #       grep -qF '#{NON_ROOT_USER} - nofile 65536' /etc/security/limits.conf || echo '#{NON_ROOT_USER} - nofile 65536' >> /etc/security/limits.conf
+      #   #   SHELL
+
+      #   vm_config.vm.provision 'shell' do |s|
+      #     s.inline = <<-SHELL
       #       apt-get update
       #       apt-get install -y \
       #         apt-transport-https \
@@ -103,141 +122,121 @@ Vagrant.configure(2) do |config|
       #         python3-pip \
       #         software-properties-common
       #       pip3 install virtualenv
-      #       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-      #       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      #       apt-get update
-      #       apt-get install -y docker-ce
-      #       usermod --groups docker --append #{NON_ROOT_USER}
+      #       # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+      #       # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      #       # apt-get update
+      #       # apt-get install -y docker-ce
+      #       # usermod --groups docker --append #{NON_ROOT_USER}
+      #       echo vm.max_map_count=262144 > /etc/sysctl.d/vm_max_map_count.conf
+      #       sysctl --system
+      #       grep -qF "#{NON_ROOT_USER} - nofile 65536" /etc/security/limits.conf || echo "#{NON_ROOT_USER} - nofile 65536" >> /etc/security/limits.conf
+      #     SHELL
+      #     s.privileged = true
+      #   end
+
+      #   vm_config.vm.provision 'shell' do |s|
+      #     s.inline = <<-SHELL
       #       echo vm.max_map_count=262144 > /etc/sysctl.d/vm_max_map_count.conf
       #       sysctl --system
       #       grep -qF '#{NON_ROOT_USER} - nofile 65536' /etc/security/limits.conf || echo '#{NON_ROOT_USER} - nofile 65536' >> /etc/security/limits.conf
-      #   SHELL
+      #       grep -qF 'root - nofile 65536' /etc/security/limits.conf || echo 'root - nofile 65536' >> /etc/security/limits.conf
+      #     SHELL
+      #     s.privileged = true
+      #   end
 
-      vm_config.vm.provision 'shell' do |s|
-        s.inline = <<-SHELL
-          apt-get update
-          apt-get install -y \
-            apt-transport-https \
-            ca-certificates \
-            curl \
-            python3-pip \
-            software-properties-common
-          pip3 install virtualenv
-          # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-          # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-          # apt-get update
-          # apt-get install -y docker-ce
-          # usermod --groups docker --append #{NON_ROOT_USER}
-          echo vm.max_map_count=262144 > /etc/sysctl.d/vm_max_map_count.conf
-          sysctl --system
-          grep -qF "#{NON_ROOT_USER} - nofile 65536" /etc/security/limits.conf || echo "#{NON_ROOT_USER} - nofile 65536" >> /etc/security/limits.conf
-        SHELL
-        s.privileged = true
-      end
+      #   # NOTE: Improving Performance on Low-Memory Linux VMs
+      #   # NOTES: https://www.codero.com/knowledge-base/content/3/389/en/custom-swap-on-linux-virtual-machines.html
+      #   vm_config.vm.provision 'shell' do |s|
+      #     s.inline = <<-SHELL
+      #     # size of swapfile in megabytes
+      #     swapsize=#{SWAPSIZE}
 
-      vm_config.vm.provision 'shell' do |s|
-        s.inline = <<-SHELL
-          echo vm.max_map_count=262144 > /etc/sysctl.d/vm_max_map_count.conf
-          sysctl --system
-          grep -qF '#{NON_ROOT_USER} - nofile 65536' /etc/security/limits.conf || echo '#{NON_ROOT_USER} - nofile 65536' >> /etc/security/limits.conf
-          grep -qF 'root - nofile 65536' /etc/security/limits.conf || echo 'root - nofile 65536' >> /etc/security/limits.conf
-        SHELL
-        s.privileged = true
-      end
+      #     # does the swap file already exist?
+      #     grep -q "swapfile" /etc/fstab
 
-      # NOTE: Improving Performance on Low-Memory Linux VMs
-      # NOTES: https://www.codero.com/knowledge-base/content/3/389/en/custom-swap-on-linux-virtual-machines.html
-      vm_config.vm.provision 'shell' do |s|
-        s.inline = <<-SHELL
-        # size of swapfile in megabytes
-        swapsize=#{SWAPSIZE}
+      #     # if not then create it
+      #     if [ $? -ne 0 ]; then
+      #       echo 'swapfile not found. Adding swapfile.'
+      #       fallocate -l ${swapsize}M /swapfile
+      #       chmod 600 /swapfile
+      #       mkswap /swapfile
+      #       swapon /swapfile
+      #       echo '/swapfile none swap defaults 0 0' >> /etc/fstab
+      #     else
+      #       echo 'swapfile found. No changes made.'
+      #     fi
 
-        # does the swap file already exist?
-        grep -q "swapfile" /etc/fstab
+      #     # output results to terminal
+      #     df -h
+      #     cat /proc/swaps
+      #     cat /proc/meminfo | grep Swap
 
-        # if not then create it
-        if [ $? -ne 0 ]; then
-          echo 'swapfile not found. Adding swapfile.'
-          fallocate -l ${swapsize}M /swapfile
-          chmod 600 /swapfile
-          mkswap /swapfile
-          swapon /swapfile
-          echo '/swapfile none swap defaults 0 0' >> /etc/fstab
-        else
-          echo 'swapfile found. No changes made.'
-        fi
+      #     # https://www.codero.com/knowledge-base/content/3/388/en/improving-performance-on-low_memory-linux-vms.html
+      #     echo vm.swappiness = 10 >> /etc/sysctl.d/30-vm-swappiness.conf
+      #     echo vm.vfs_cache_pressure = 50 >> /etc/sysctl.d/30-vm-vfs_cache_pressure.conf
+      #     sysctl -p
+      #     SHELL
+      #     s.privileged = true
+      #   end
 
-        # output results to terminal
-        df -h
-        cat /proc/swaps
-        cat /proc/meminfo | grep Swap
+      #   # NOTE: mproving Performance on Low-Memory Linux VMs
+      #   vm_config.vm.provision 'shell' do |s|
+      #     s.inline = <<-SHELL
+      #     DEBIAN_FRONTEND=noninteractive apt-get update; apt-get install -y \
+      #     sudo \
+      #     bash-completion \
+      #     apt-file \
+      #     autoconf \
+      #     automake \
+      #     gettext \
+      #     yelp-tools \
+      #     flex \
+      #     bison \
+      #     build-essential \
+      #     ccache \
+      #     curl \
+      #     git \
+      #     lcov \
+      #     libbz2-dev \
+      #     libffi-dev \
+      #     libreadline-dev \
+      #     libsqlite3-dev \
+      #     libssl-dev \
+      #     python3-pip \
+      #     vim \
+      #    ; \
+      #         apt-get update \
+      #    ; \
+      #     DEBIAN_FRONTEND=noninteractive apt-get install -y python-six python-pip \
+      #    ; \
+      #         rm -rf /var/lib/apt/lists/*
+      #     SHELL
+      #     s.privileged = true
+      #   end
 
-        # https://www.codero.com/knowledge-base/content/3/388/en/improving-performance-on-low_memory-linux-vms.html
-        echo vm.swappiness = 10 >> /etc/sysctl.d/30-vm-swappiness.conf
-        echo vm.vfs_cache_pressure = 50 >> /etc/sysctl.d/30-vm-vfs_cache_pressure.conf
-        sysctl -p
-        SHELL
-        s.privileged = true
-      end
+      # # FIXME: Get this into a role, ansible install bcc 9/29/2018
+      # #   vm_config.vm.provision 'shell' do |s|
+      # #     s.inline = <<-SHELL
+      # #     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D4284CDD
+      # #     echo "deb https://repo.iovisor.org/apt/bionic bionic main" | tee /etc/apt/sources.list.d/iovisor.list
+      # #     apt-get update
+      # #     apt-get install bcc-tools libbcc-examples linux-headers-$(uname -r) -y
+      # #     SHELL
+      # #     s.privileged = true
+      # #   end
 
-      # NOTE: mproving Performance on Low-Memory Linux VMs
-      vm_config.vm.provision 'shell' do |s|
-        s.inline = <<-SHELL
-        DEBIAN_FRONTEND=noninteractive apt-get update; apt-get install -y \
-        sudo \
-        bash-completion \
-        apt-file \
-        autoconf \
-        automake \
-        gettext \
-        yelp-tools \
-        flex \
-        bison \
-        build-essential \
-        ccache \
-        curl \
-        git \
-        lcov \
-        libbz2-dev \
-        libffi-dev \
-        libreadline-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        python3-pip \
-        vim \
-       ; \
-            apt-get update \
-       ; \
-        DEBIAN_FRONTEND=noninteractive apt-get install -y python-six python-pip \
-       ; \
-            rm -rf /var/lib/apt/lists/*
-        SHELL
-        s.privileged = true
-      end
-
-    # FIXME: Get this into a role, ansible install bcc 9/29/2018
-    #   vm_config.vm.provision 'shell' do |s|
-    #     s.inline = <<-SHELL
-    #     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D4284CDD
-    #     echo "deb https://repo.iovisor.org/apt/bionic bionic main" | tee /etc/apt/sources.list.d/iovisor.list
-    #     apt-get update
-    #     apt-get install bcc-tools libbcc-examples linux-headers-$(uname -r) -y
-    #     SHELL
-    #     s.privileged = true
-    #   end
-
-      # FIXME: Get this into a role, systemctl 9/29/2018
-      vm_config.vm.provision 'shell' do |s|
-        s.inline = <<-SHELL
-        apt-get update
-        apt-get install linux-headers-$(uname -r) -y
-        sysctl net.ipv4.tcp_available_congestion_control
-        echo net.core.default_qdisc=fq >> /etc/sysctl.d/30-tcp_congestion_control.conf
-        echo net.ipv4.tcp_congestion_control=bbr >> /etc/sysctl.d/30-tcp_congestion_control.conf
-        sysctl -p
-        SHELL
-        s.privileged = true
-      end
+      #   # FIXME: Get this into a role, systemctl 9/29/2018
+      #   vm_config.vm.provision 'shell' do |s|
+      #     s.inline = <<-SHELL
+      #     apt-get update
+      #     apt-get install linux-headers-$(uname -r) -y
+      #     sysctl net.ipv4.tcp_available_congestion_control
+      #     echo net.core.default_qdisc=fq >> /etc/sysctl.d/30-tcp_congestion_control.conf
+      #     echo net.ipv4.tcp_congestion_control=bbr >> /etc/sysctl.d/30-tcp_congestion_control.conf
+      #     sysctl -p
+      #     SHELL
+      #     s.privileged = true
+      #   end
 
       vm_config.vm.provision :ansible do |ansible|
         ansible.host_key_checking	= 'false'
@@ -245,7 +244,7 @@ Vagrant.configure(2) do |config|
         ansible.limit = 'all'
         ansible.playbook = 'vagrant_playbook.yml'
         ansible.groups = config_yml[:groups]
-        ansible.verbose = "vvvv"
+        ansible.verbose = 'vvvv'
         ansible.extra_vars = {
           deploy_env: 'vagrant'
         }

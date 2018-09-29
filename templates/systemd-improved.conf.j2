@@ -1,0 +1,49 @@
+
+[Unit]
+Description=dnsmasq lightweight caching DNS server
+[Service]
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+EnvironmentFile=/etc/dnsmasq.env
+LimitNOFILE=64000
+# ExecStartPre=/bin/ping -c1 ready.spartan
+# ExecStartPre=/bin/ping -c1 zk-1.zk
+# ExecStartPre=/bin/ping -c1 zk-2.zk
+# ExecStartPre=/bin/ping -c1 zk-3.zk
+ExecStartPre=/usr/bin/env modprobe dummy
+ExecStartPre=-/usr/bin/env ip link add dnsmasq type dummy
+ExecStartPre=/usr/bin/env ip link set dnsmasq up
+ExecStartPre=-/usr/bin/env ip addr add 203.0.113.1/32 dev dnsmasq
+ExecStart=/usr/bin/dnsmasq \
+--address=/localhost/127.0.0.1 \
+--address=/localhost/::1 \
+--cache-size=10000 \
+--dns-forward-max=300 \
+--clear-on-reload \
+--server=${DNSMASQ_PRIMARY_RESOLVER} \
+--server=${DNSMASQ_SECONDARY_RESOLVER} \
+--server=/spartan/198.51.100.1 \
+--server=/spartan/198.51.100.2 \
+--server=/spartan/198.51.100.3 \
+--server=/zk/198.51.100.1 \
+--server=/zk/198.51.100.2 \
+--server=/zk/198.51.100.3 \
+--server=/mesos/198.51.100.1 \
+--server=/mesos/198.51.100.2 \
+--server=/mesos/198.51.100.3 \
+--server=/directory/198.51.100.1 \
+--server=/directory/198.51.100.2 \
+--server=/directory/198.51.100.3 \
+--port=53 \
+--interface=dnsmasq \
+--bind-interfaces \
+--except-interface=lo \
+--no-resolv \
+--keep-in-foreground
+[Install]
+WantedBy=multi-user.target
+
+# ExecStartPost=/bin/sh -c 'sleep 1 && pgrep -u {{ boss__dnsmasq__user }} dnsmasq > {{ boss__dnsmasq__pidfile }}'
+# ExecStopPost=/bin/rm -f {{ boss__dnsmasq__pidfile }}

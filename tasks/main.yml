@@ -18,7 +18,7 @@
   tags: ["distribution", "packages", "service", "dnsmasq"]
 
 - include: resolvconf.yml
-  when: dnsmasq_resolvconf
+  when: boss__dnsmasq__resolvconf
   tags: ["dnsmasq", "resolvconf"]
 
 - include: install.yml
