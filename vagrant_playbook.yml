@@ -14,6 +14,7 @@
     - role: boss-ansible-role-core
     - role: boss-ansible-role-fact
     - role: boss-ansible-role-environment
+    - role: boss-ansible-role-etckeeper
     - role: ../
       boss__dnsmasq__conf_log_async: 25
       # For debugging purposes, log each DNS query as it passes through
