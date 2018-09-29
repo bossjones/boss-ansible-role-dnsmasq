@@ -22,3 +22,9 @@
   dnsmasq_servers:
     - dnsmasq1
     - dnsmasq2
+  servers:
+    - dnsmasq1
+    - dnsmasq2
+  dns_servers:
+    - dnsmasq1
+    - dnsmasq2

@@ -6,12 +6,12 @@
 # no_log: true
 
 # FIXME: NEW 9/28/2018
-- hosts: servers
+- hosts: dns_servers
   gather_facts: True
   become: yes
   become_method: sudo
   tags:
-    - servers
+    - dnsmasq
   roles:
     - role: boss-ansible-role-core
     - role: boss-ansible-role-fact
