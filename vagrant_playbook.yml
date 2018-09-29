@@ -1,6 +1,18 @@
 ---
-
 # no_log: true
+# FIXME: NEW 9/28/2018
+- hosts: dns_servers
+  gather_facts: True
+  become: yes
+  become_method: sudo
+  tags:
+    - bootstrap
+  roles:
+    - role: boss-ansible-role-bootstrap
+    - role: boss-ansible-role-core
+    - role: boss-ansible-role-fact
+    - role: boss-ansible-role-environment
+    - role: boss-ansible-role-etckeeper
 
 # FIXME: NEW 9/28/2018
 - hosts: dns_servers
@@ -10,11 +22,6 @@
   tags:
     - dnsmasq
   roles:
-    - role: boss-ansible-role-bootstrap
-    - role: boss-ansible-role-core
-    - role: boss-ansible-role-fact
-    - role: boss-ansible-role-environment
-    - role: boss-ansible-role-etckeeper
     - role: ../
       boss__dnsmasq__conf_log_async: 25
       # For debugging purposes, log each DNS query as it passes through
@@ -53,8 +60,12 @@
       boss__dnsmasq__host_domain: darklabs.home
       #boss__dnsmasq__host_search: local
       # Set it to the ips of the private DNS servers, then default to LAN nameserver
-      boss__dnsmasq__host_resolvers: [ "127.0.0.1" , "192.168.33.100", "192.168.33.101", "192.168.1.1" ]
-      boss__dnsmasq__conf_strict_order: True
+      # boss__dnsmasq__host_resolvers: [ "127.0.0.1" , "192.168.33.100", "192.168.33.101", "192.168.1.1" ]
+      # boss__dnsmasq__conf_strict_order: True
+      # SOURCE: https://wiki.archlinux.org/index.php/dnsmasq
+      # ::1,127.0.0.1,192.168.1.1
+      # FIXME: Just added 9/29/2018 (5:45PM)
+      # boss__dnsmasq__conf_listen: ["127.0.0.1", "192.168.33.100", "192.168.33.101", "192.168.1.1"]
       ##############################################
       boss__dnsmasq__dhcp: False
       boss__dnsmasq__tftp: False
@@ -124,8 +135,8 @@
       ### resolv.conf
       # appended to DHCP hosts and, if above option specified, to hosts from static IPs
       # domain=lan.mydomain.com
-      boss__dnsmasq__host_domain: "darklabs.home"
-      boss__dnsmasq__host_search: "darklabs.home"
+      # boss__dnsmasq__host_domain: "darklabs.home"
+      # boss__dnsmasq__host_search: "darklabs.home"
       # -------------------------------------------------------------------
       # 127.0.0.1	localhost
       # # The following lines are desirable for IPv6 capable hosts
