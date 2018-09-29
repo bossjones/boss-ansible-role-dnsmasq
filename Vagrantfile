@@ -219,6 +219,7 @@ Vagrant.configure(2) do |config|
           deploy_env: 'vagrant'
         }
         # ansible.skip_tags = %w[bootstrap]
+        ansible.raw_arguments = ["--forks=10"]
       end
     end
   end
