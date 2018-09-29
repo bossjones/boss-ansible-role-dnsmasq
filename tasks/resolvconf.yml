@@ -3,6 +3,7 @@
   service:
     name: "{{ boss__dnsmasq__daemon }}"
     state: started
+    sleep: 60
   register: result
   ignore_errors: True
 

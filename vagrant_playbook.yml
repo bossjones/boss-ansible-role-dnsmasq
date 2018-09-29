@@ -57,7 +57,7 @@
       #       search localdomain
       # nameserver 192.168.1.1
       ### resolv.conf
-      boss__dnsmasq__host_domain: "darklabs.home"
+      # boss__dnsmasq__host_domain: "darklabs.home"
       #boss__dnsmasq__host_search: local
       # Set it to the ips of the private DNS servers, then default to LAN nameserver
       # boss__dnsmasq__host_resolvers: [ "127.0.0.1" , "192.168.33.100", "192.168.33.101", "192.168.1.1" ]
@@ -69,18 +69,18 @@
       ##############################################
       boss__dnsmasq__dhcp: False
       boss__dnsmasq__tftp: False
-      # boss__dnsmasq__conf_dhcp:
-      #   # enp0s8 for Centos 7, eth1 for Ubuntu
-      #   - device: "{{ ansible_default_ipv4.interface }}"
-      #     range: ["10.0.0.0", "10.0.7.255", "infinite"]
-      #     ignore_names: True
-      #     generate_names: True
-      #     option:
-      #       - "option:router,{{ ansible_default_ipv4.gateway }}"
-      #       - "option:dns-server,{{ ansible_default_ipv4.address }}"
-      #     boot:
-      #       - "pxelinux.0"
-      #     tftp: "/tmp"
+      boss__dnsmasq__conf_dhcp:
+        # enp0s8 for Centos 7, eth1 for Ubuntu
+        - device: "{{ ansible_default_ipv4.interface }}"
+          range: ["10.0.0.0", "10.0.7.255", "infinite"]
+          ignore_names: True
+          generate_names: True
+          option:
+            - "option:router,{{ ansible_default_ipv4.gateway }}"
+            - "option:dns-server,{{ ansible_default_ipv4.address }}"
+          boot:
+            - "pxelinux.0"
+          tftp: "/tmp"
       # Additional hosts file, /etc/hosts format (it is a list!)
       boss__dnsmasq__conf_hosts:
       # - ["127.0.0.1", "localhost"]
@@ -110,7 +110,8 @@
       # suppress reading of /etc/resolv.conf.
       # Don't let anything outside of our dns server return resolved ip addresses for these values below
       # boss__dnsmasq__conf_servers: [ "/darklabs.home/", "/hyenalabs.home/" ]
-      boss__dnsmasq__conf_servers: [ "/darklabs.home/", "/hyenalabs.home/", "8.8.8.8", "8.8.4.4" ]
+      # boss__dnsmasq__conf_servers: [ "/darklabs.home/", "/hyenalabs.home/", "8.8.8.8", "8.8.4.4" ]
+      boss__dnsmasq__conf_servers: [ "/darklabs.home/", "8.8.8.8", "8.8.4.4" ]
 
       # Log lots of extra information about DHCP transactions.
       boss__dnsmasq__conf_log_dhcp: False
@@ -136,8 +137,8 @@
       ### resolv.conf
       # appended to DHCP hosts and, if above option specified, to hosts from static IPs
       # domain=lan.mydomain.com
-      # boss__dnsmasq__host_domain: "darklabs.home"
-      # boss__dnsmasq__host_search: "darklabs.home"
+      boss__dnsmasq__host_domain: "darklabs.home"
+      boss__dnsmasq__host_search: "darklabs.home"
       # -------------------------------------------------------------------
       # 127.0.0.1	localhost
       # # The following lines are desirable for IPv6 capable hosts
