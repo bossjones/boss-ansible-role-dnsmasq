@@ -55,3 +55,5 @@ raw:
 install-virtualenv-osx:
 	ARCHFLAGS="-arch x86_64" LDFLAGS="-L/usr/local/opt/openssl/lib" CFLAGS="-I/usr/local/opt/openssl/include" pip install -r requirements.txt
 
+docker-run:
+	@virtualization/docker/docker-run.sh
