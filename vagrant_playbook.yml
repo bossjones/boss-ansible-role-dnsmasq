@@ -224,3 +224,14 @@
 
 # #   - name: Display all variables/facts known for a host
 # #     debug: var=hostvars[inventory_hostname]
+
+# no_log: true
+# FIXME: NEW 9/28/2018
+- hosts: dns_servers
+  gather_facts: True
+  become: yes
+  become_method: sudo
+  tags:
+    - debug
+  roles:
+    - role: boss-ansible-role-debug

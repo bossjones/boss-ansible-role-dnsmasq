@@ -5,3 +5,4 @@
 - src: https://github.com/bossjones/boss-ansible-role-bootstrap
 - src: https://github.com/bossjones/boss-ansible-role-docker
 - src: https://github.com/bossjones/boss-ansible-role-etckeeper
+- src: https://github.com/bossjones/boss-ansible-role-debug
