@@ -38,8 +38,11 @@ def test_dnsmasq_running_and_enabled(host):
     dnsmasq = host.service("dnsmasq")
     assert dnsmasq.is_running
     assert dnsmasq.is_enabled
-    assert dnsmasq.socket("tcp://53").is_listening
-    assert dnsmasq.socket("tcp://127.0.0.1:53").is_listening
+    dnsmasq_socket = host.socket("udp://127.0.0.1:53")
+    assert dnsmasq_socket.is_listening
+    dnsmasq_socket = host.socket("tcp://127.0.0.1:53")
+    assert dnsmasq_socket.is_listening
+    print(host.get_listening_sockets())
 
 def test_dnsmasq_user(host):
     dnsmasq = host.user("dnsmasq")
