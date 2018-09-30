@@ -1,0 +1,113 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  enabled: False
+platforms:
+  # source: https://blog.opsfactory.rocks/testing-ansible-roles-with-molecule-97ceca46736a
+  # source: https://github.com/solita/docker-systemd
+  # source: https://github.com/solita/docker-systemd-ssh/blob/master/Dockerfile
+  #
+  - name: docker-dnsmasq1
+    image: solita/ubuntu-systemd
+    image_version: latest
+    privileged: True
+    groups:
+        - servers
+    capabilities:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command: /sbin/init
+
+  - name: docker-dnsmasq2
+    image: solita/ubuntu-systemd
+    image_version: latest
+    privileged: True
+    groups:
+        - servers
+    capabilities:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command: /sbin/init
+
+  # - name: fedora-01
+  #   image: bossjones/fedora24-systemd-ansible:latest
+  #   privileged: True
+  #   command: /usr/sbin/init
+  #   # run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  #   # init: /usr/lib/systemd/systemd
+  #   groups:
+  #     - fedora
+  # TODO: USE THESES
+  # SOURCE: https://zapier.com/engineering/ansible-molecule/
+  #   - name: centos7
+  #   image: retr0h/centos7-systemd-ansible
+  #   image_version: latest
+  #   privileged: True
+  # - name: bootstrap-ubuntu-16.04
+  #   image: solita/ubuntu-systemd
+  #   image_version: latest
+  #   privileged: True
+  # - name: bootstrap-ubuntu-14.04
+  #   image: ubuntu-upstart
+  #   image_version: latest
+  #   privileged: True
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+    enabled: False
+    # EANSIBLE0013 should not be raised for shell tasks that use globs.
+    options:
+      x: ANSIBLE0013
+  inventory:
+    host_vars:
+      docker-dnsmasq1:
+        # SOURCE: https://github.com/osism/ansible-hosts/blob/ce8147623491011269bf15291bd8bf83397ab1ff/molecule/default/molecule.yml
+        # NOTE: workaround for https://github.com/moby/moby/issues/22281
+        hosts_file: /etc/hosts.molecule
+        management_interface: lo0
+        inventory_hostname: docker-dnsmasq1
+        inventory_hostname_short: docker-dnsmasq1
+        ansible_lo0:
+          ipv4:
+            address: 127.0.0.1
+        ansible_default_ipv4:
+          address: 127.0.1.2
+      docker-dnsmasq2:
+        # SOURCE: https://github.com/osism/ansible-hosts/blob/ce8147623491011269bf15291bd8bf83397ab1ff/molecule/default/molecule.yml
+        # NOTE: workaround for https://github.com/moby/moby/issues/22281
+        hosts_file: /etc/hosts.molecule
+        management_interface: lo0
+        inventory_hostname: docker-dnsmasq2
+        inventory_hostname_short: docker-dnsmasq2
+        ansible_lo0:
+          ipv4:
+            address: 127.0.0.1
+        ansible_default_ipv4:
+          address: 127.0.1.3
+verifier:
+  name: testinfra
+  options:
+    verbose: True
+  lint:
+    name: flake8
+    enabled: False
+scenario:
+  name: default
+  test_sequence:
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - lint
+    - side_effect
+    - verify
+    - destroy
