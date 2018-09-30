@@ -114,13 +114,20 @@ pip-tools:
 pip-compile-upgrade-all: pip-tools
 	pip-compile --output-file requirements.txt requirements.in --upgrade
 	pip-compile --output-file requirements-dev.txt requirements-dev.in --upgrade
+	pip-compile --output-file requirements-test.txt requirements-test.in --upgrade
 
 .PHONY: pip-compile
 pip-compile: pip-tools
 	pip-compile --output-file requirements.txt requirements.in
 	pip-compile --output-file requirements-dev.txt requirements-dev.in
+	pip-compile --output-file requirements-test.txt requirements-test.in
 
 .PHONY: install-deps-all
 install-deps-all:
 	pip install -r requirements.txt
 	pip install -r requirements-dev.txt
+
+# travis-bootstrap:
+# 	pip install tox-travis
+# tox-install-all-notest:
+# 	tox -e py36 --notest
