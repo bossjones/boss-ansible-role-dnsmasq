@@ -22,6 +22,22 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     command: /sbin/init
+    security_opts:
+      - seccomp=unconfined
+    exposed_ports:
+      - 53/udp
+      - 53/tcp
+    published_ports:
+      - 8053:53/udp
+      - 8053:53/tcp
+    ulimits:
+      - nofile:262144:262144
+    dns_servers:
+      - 8.8.8.8
+      - 8.8.4.4
+    networks:
+      - name: foo1
+      - name: bar1
 
   - name: docker-dnsmasq2
     image: solita/ubuntu-systemd
@@ -34,6 +50,22 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     command: /sbin/init
+    security_opts:
+      - seccomp=unconfined
+    exposed_ports:
+      - 53/udp
+      - 53/tcp
+    published_ports:
+      - 8053:53/udp
+      - 8053:53/tcp
+    ulimits:
+      - nofile:262144:262144
+    dns_servers:
+      - 8.8.8.8
+      - 8.8.4.4
+    networks:
+      - name: foo2
+      - name: bar2
 
   # - name: fedora-01
   #   image: bossjones/fedora24-systemd-ansible:latest
