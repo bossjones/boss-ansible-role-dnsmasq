@@ -12,7 +12,7 @@
 #   # Download test shim.
 #   - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
 #   - chmod +x ${PWD}/tests/test.sh
-  - make travis
+# # - make travis
 
 sudo: required
 
@@ -27,18 +27,26 @@ before_install:
 install:
   - pip install tox-travis
 
-script:
-  - tox
+matrix:
+  fast_finish: true
+  include:
+    - python: 2.7
+      env: TOX_ENV=py27-ansible25
+      dist: xenial
+    - python: 2.7
+      env: TOX_ENV=py27-ansible26
+      dist: xenial
+  #   - python: "3.8-dev"
+  #     env: TOX_ENV=py38
+  #     dist: xenial
+  #     if: branch = master AND type = push
+  # allow_failures:
+  #   - python: "3.8-dev"
+  #     env: TOXENV=py38
+  #     dist: xenial
 
-# matrix:
-#   include:
-#     - python: 2.7
-#       env:
-#        - TOX_ENV=py27-ansible25
-#     - python: 2.7
-#       env:
-#        - TOX_ENV=py27-ansible26
-#     # - python: 3.5
-#     #   env:
-#     #     - TOX_ENV=py35
-# script: tox -e $TOX_ENV
+cache:
+  directories:
+    - $HOME/.cache/pip
+# script: travis_wait 30 tox --develop
+script: tox -e $TOX_ENV

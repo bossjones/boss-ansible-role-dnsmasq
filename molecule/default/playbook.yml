@@ -13,19 +13,6 @@
       # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
       boss__dnsmasq__dhcp: False
       boss__dnsmasq__tftp: False
-      # boss__dnsmasq__conf_dhcp:
-      #   # enp0s8 for Centos 7, eth1 for Ubuntu
-      #   - device: "{{ ansible_default_ipv4.interface }}"
-      #     range: ["10.0.0.0", "10.0.7.255", "infinite"]
-      #     ignore_names: True
-      #     generate_names: True
-      #     option:
-      #       - "option:router,{{ ansible_default_ipv4.gateway }}"
-      #       - "option:dns-server,{{ ansible_default_ipv4.address }}"
-      #     boot:
-      #       - "pxelinux.0"
-      #     tftp: "/tmp"
-      # Additional hosts file, /etc/hosts format (it is a list!)
       boss__dnsmasq__conf_hosts:
       - ["192.168.33.100", "dnsmasq1.darklabs.home", "dnsmasq1" ]
       - ["192.168.33.101", "dnsmasq2.darklabs.home", "dnsmasq2" ]

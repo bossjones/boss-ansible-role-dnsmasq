@@ -87,7 +87,8 @@ test:
 bootstrap:
 	echo bootstrap
 
-# travis: install-test-deps ci
+travis:
+	tox
 
 # travis-osx:
 # 	$(MAKE) venv-osx
