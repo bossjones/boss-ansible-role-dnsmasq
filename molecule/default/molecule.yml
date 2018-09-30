@@ -99,6 +99,13 @@ provisioner:
     options:
       x: ANSIBLE0013
   inventory:
+    group_vars:
+      docker-hosts:
+        # This should allow docker-in-docker to work
+        docker_storage_driver: vfs
+        molecule_ansible_iface: ansible_eth0
+      vagrant-hosts:
+        molecule_ansible_iface: ansible_eth1
     host_vars:
       docker-dnsmasq1:
         # SOURCE: https://github.com/osism/ansible-hosts/blob/ce8147623491011269bf15291bd8bf83397ab1ff/molecule/default/molecule.yml
@@ -124,6 +131,17 @@ provisioner:
             address: 127.0.0.1
         ansible_default_ipv4:
           address: 127.0.1.3
+
+ansible:
+  diff: True
+  #verbose: True
+  group_vars:
+    docker-hosts:
+      # This should allow docker-in-docker to work
+      docker_storage_driver: vfs
+      molecule_ansible_iface: ansible_eth0
+    vagrant-hosts:
+      molecule_ansible_iface: ansible_eth1
 verifier:
   name: testinfra
   options:

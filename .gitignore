@@ -33,6 +33,9 @@ roles/*
 *.log
 *.retry
 .vagrant
+ansible_variables
+hostvars.json
+hostvars.yml
 
 
 ############# ( got this from boss-ansible-role-update-hosts ) 8:45pm 9/29/2018 ##################

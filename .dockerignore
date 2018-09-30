@@ -41,3 +41,6 @@ Procfile*
 _debug/
 espeak_tmp.wav
 .coverage.*
+ansible_variables
+hostvars.json
+hostvars.yml
