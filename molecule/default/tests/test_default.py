@@ -42,13 +42,12 @@ def test_dnsmasq_running_and_enabled(host):
     assert dnsmasq_socket.is_listening
     dnsmasq_socket = host.socket("tcp://127.0.0.1:53")
     assert dnsmasq_socket.is_listening
-    print(host.get_listening_sockets())
 
 def test_dnsmasq_user(host):
     dnsmasq = host.user("dnsmasq")
     assert dnsmasq.name == "dnsmasq"
     # assert dnsmasq.uid == "107"
-    assert dnsmasq.gid == "65534"
+    assert dnsmasq.gid == 65534
     assert "nogroup" in dnsmasq.groups
     assert dnsmasq.home == "/var/lib/misc"
     assert dnsmasq.shell == "/bin/false"
