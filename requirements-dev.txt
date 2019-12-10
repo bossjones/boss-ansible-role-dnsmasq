@@ -54,7 +54,7 @@ pytest==3.8.1             # via testinfra
 python-dateutil==2.7.3    # via arrow
 python-gilt==1.2.1        # via molecule
 pyyaml==3.13              # via ansible, ansible-lint, molecule, python-gilt, yamllint
-requests==2.19.1          # via cookiecutter, docker-py
+requests==2.20.0          # via cookiecutter, docker-py
 sh==1.12.14               # via molecule, python-gilt
 six==1.11.0               # via ansible-lint, bcrypt, click-completion, cryptography, docker-py, docker-pycreds, fasteners, molecule, more-itertools, pynacl, pytest, python-dateutil, testinfra, websocket-client
 tabulate==0.8.2           # via molecule
