@@ -22,7 +22,7 @@ click==6.7                # via click-completion, cookiecutter, molecule, python
 colorama==0.3.9           # via molecule, python-gilt
 cookiecutter==1.6.0       # via molecule
 cryptography==2.3.1       # via ansible, paramiko
-docker-py==1.10.6
+docker-py==1.10.6         # via -r requirements-dev.in
 docker-pycreds==0.3.0     # via docker-py
 fasteners==0.14.1         # via python-gilt
 flake8==3.5.0             # via molecule
@@ -33,7 +33,7 @@ jinja2-time==0.2.0        # via cookiecutter
 jinja2==2.10              # via ansible, click-completion, cookiecutter, jinja2-time, molecule
 markupsafe==1.0           # via jinja2
 mccabe==0.6.1             # via flake8
-molecule==2.18.1
+molecule==2.18.1          # via -r requirements-dev.in
 monotonic==1.5            # via fasteners
 more-itertools==4.3.0     # via pytest
 paramiko==2.4.2           # via ansible
@@ -60,7 +60,7 @@ six==1.11.0               # via ansible-lint, bcrypt, click-completion, cryptogr
 tabulate==0.8.2           # via molecule
 testinfra==1.14.1         # via molecule
 tree-format==0.1.2        # via molecule
-urllib3==1.23             # via requests
+urllib3==1.24.2           # via requests
 websocket-client==0.53.0  # via docker-py
 whichcraft==0.4.1         # via cookiecutter
 yamllint==1.11.1          # via molecule
